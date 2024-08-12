@@ -24,7 +24,7 @@ You are tasked with developing a PHP program that reads a text document and calc
 
 ### Hints and Considerations:
 
-Encourage students to modularize their code by creating functions for each major step (e.g., reading the file, tokenizing the text, calculating word frequencies).
+Create functions for each major step (e.g., reading the file, tokenizing the text, calculating word frequencies).
 
 Students can use built-in PHP functions like file_get_contents(), str_word_count(), explode(), array_count_values(), and arsort() for sorting.
 
