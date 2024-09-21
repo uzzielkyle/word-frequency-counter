@@ -6,6 +6,11 @@ body {
     padding: 20px;
 }
 
+main {
+    display: grid;
+    place-items: center;
+}
+
 /* Style the form container */
 form {
     background-color: #fff;
@@ -47,4 +52,23 @@ input[type="submit"] {
 
 input[type="submit"]:hover {
     background-color: #0056b3;
+}
+
+#container {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 20px;
+    min-width: 405px;
+    max-width: 1000px;
+    margin: 0 auto;
+    margin-top: 16px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+#output-box {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    text-align: left;
 }
