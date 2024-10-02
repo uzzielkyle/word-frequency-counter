@@ -38,30 +38,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
 
-        function sortTokens(array $tokens, string $sort = "asc"): array
-        {
-            if (empty($tokens)) {
-                throw new InvalidArgumentException("Tokens array cannot be empty.");
-            }
-
-            if (empty($sort)) {
-                $sort = "asc";
-            }
-
-            if ($sort !== "asc" && $sort !== "desc") {
-                throw new InvalidArgumentException("Invalid sort order. Use 'asc' for ascending or 'desc' for descending.");
-            }
-
-            if ($sort === "asc") {
-                sort($tokens);
-            } elseif ($sort === "desc") {
-                rsort($tokens);
-            }
-
-            return $tokens;
-        }
-
-
         function sliceArray(array $array, int $limit): array
         {
             if ($limit < 0) {
@@ -75,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         function filterTokens(array $tokens, array $wordsToRemove): array
         {
             $filteredTokens = array_filter($tokens, function ($token) use ($wordsToRemove) {
-                return !in_array($token, $wordsToRemove);
+                return !in_array(strtolower($token), array_map('strtolower', $wordsToRemove));
             });
 
             return $filteredTokens;
@@ -92,6 +68,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 } else {
                     $wordFrequencies[$word] = 1;
                 }
+            }
+
+            return $wordFrequencies;
+        }
+
+        function sortWordFrequencies(array $wordFrequencies, string $sort)
+        {
+            if ($sort === 'asc') {
+                asort($wordFrequencies);
+            } elseif ($sort === 'desc') {
+                arsort($wordFrequencies);
+            } else {
+                throw new InvalidArgumentException("Invalid sort order: $sort. Use 'asc' or 'desc'.");
             }
 
             return $wordFrequencies;
@@ -277,11 +266,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $filtered_tokens = filterTokens($tokens, $STOPWORDS);
 
-        $sorted_tokens = sortTokens($filtered_tokens, $sort);
+        $word_frequencies = countWordFrequencies($filtered_tokens);
 
-        $word_frequencies = countWordFrequencies($sorted_tokens);
+        $sorted_word_frequencies = sortWordFrequencies($word_frequencies, $sort);
 
-        $sliced_word_frequencies = sliceArray($word_frequencies, $limit);
+        $sliced_word_frequencies = sliceArray($sorted_word_frequencies, $limit);
 
         echo json_encode($sliced_word_frequencies);
     }
